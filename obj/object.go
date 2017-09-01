@@ -1,15 +1,21 @@
 package obj
 
+// SubObject ...
+type SubObject struct {
+	Name           string
+	FaceStartIndex int
+}
+
 // An Object is the toplevel loadable object
 type Object struct {
-	Name     string
 	Vertices []Vertex
 	Normals  []Normal
 	Textures []TextureCoord
 	Faces    []Face
 
 	// Custom types for custom
-	Custom map[string][]interface{}
+	Custom     map[string][]interface{}
+	Subobjects []SubObject
 }
 
 // AddCustom adds a custom object by key to the Custom map
