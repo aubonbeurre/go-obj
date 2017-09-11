@@ -2,8 +2,14 @@ package obj
 
 // SubObject ...
 type SubObject struct {
-	Name           string
-	FaceStartIndex int
+	Name         string
+	FaceEndIndex int
+}
+
+// SubMaterial ...
+type SubMaterial struct {
+	Name         string
+	FaceEndIndex int
 }
 
 // An Object is the toplevel loadable object
@@ -14,8 +20,9 @@ type Object struct {
 	Faces    []Face
 
 	// Custom types for custom
-	Custom     map[string][]interface{}
-	Subobjects []SubObject
+	Custom       map[string][]interface{}
+	Subobjects   []SubObject
+	SubMaterials []SubMaterial
 }
 
 // AddCustom adds a custom object by key to the Custom map

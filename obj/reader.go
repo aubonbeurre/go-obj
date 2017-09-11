@@ -23,6 +23,7 @@ func NewReader(r io.Reader, os ...ReaderOption) Reader {
 	}
 	sr.router["#"] = commentHandler
 	sr.router["o"] = objectHandler
+	sr.router["usemtl"] = materialHandler
 	sr.router["v"] = vertexHandler
 	sr.router["vn"] = normalHandler
 	sr.router["vt"] = textureHandler
@@ -50,7 +51,12 @@ func (r *stdReader) Read() (*Object, error) {
 	for {
 		line, err := buf.ReadBytes('\n')
 		if err == io.EOF {
-			o.Subobjects[len(o.Subobjects)-1].FaceStartIndex = len(o.Faces)
+			if o.Subobjects != nil {
+				o.Subobjects[len(o.Subobjects)-1].FaceEndIndex = len(o.Faces)
+			}
+			if o.SubMaterials != nil {
+				o.SubMaterials[len(o.SubMaterials)-1].FaceEndIndex = len(o.Faces)
+			}
 			return &o, nil
 		}
 		if err != nil && err != io.EOF {
@@ -99,9 +105,17 @@ func commentHandler(o *Object, token string, rest ...string) error {
 
 func objectHandler(o *Object, token string, rest ...string) error {
 	if o.Subobjects != nil {
-		o.Subobjects[len(o.Subobjects)-1].FaceStartIndex = len(o.Faces)
+		o.Subobjects[len(o.Subobjects)-1].FaceEndIndex = len(o.Faces)
 	}
 	o.Subobjects = append(o.Subobjects, SubObject{Name: rest[0]})
+	return nil
+}
+
+func materialHandler(o *Object, token string, rest ...string) error {
+	if o.SubMaterials != nil {
+		o.SubMaterials[len(o.SubMaterials)-1].FaceEndIndex = len(o.Faces)
+	}
+	o.SubMaterials = append(o.SubMaterials, SubMaterial{Name: rest[0]})
 	return nil
 }
 
