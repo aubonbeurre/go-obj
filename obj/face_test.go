@@ -13,7 +13,7 @@ var faceReadTests = []struct {
 	Error string
 	Face  Face
 }{
-	{stringList{"12//1"}, "", Face{fNullIndex, []*Point{&Point{&Vertex{12, 1, 1, 1}, &Normal{1, 1, 2, 3}, nil}}}},
+	{stringList{"12//1"}, "", Face{fNullIndex, []*Point{{&Vertex{12, 1, 1, 1}, &Normal{1, 1, 2, 3}, nil}}}},
 }
 
 func TestReadFace(t *testing.T) {
@@ -58,11 +58,11 @@ var faceWriteTests = []struct {
 	{
 		Face: Face{fNullIndex,
 			[]*Point{
-				&Point{
+				{
 					Vertex: &Vertex{12, 0, 0, 0},
 					Normal: &Normal{2, 0, 0, 0},
 				},
-				&Point{
+				{
 					Vertex: &Vertex{13, 0, 0, 0},
 					Normal: &Normal{2, 0, 0, 0},
 				},
